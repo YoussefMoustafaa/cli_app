@@ -19,7 +19,6 @@ import main.commands.TouchCommand;
 import main.commands.WriteCommand;
 import main.parser.CommandParser;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -73,9 +72,9 @@ public class CommandExecutor {
         if (command != null && command instanceof ChainedCommand) {
                 ChainedCommand chainedCommand = (ChainedCommand) command;
     
-                String[] remArgs = Arrays.copyOfRange(Args, 2, Args.length);
+                // String[] remArgs = Arrays.copyOfRange(Args, 2, Args.length);
                 chainedCommand.setInput(inputString);
-                chainedCommand.execute(remArgs);
+                chainedCommand.execute(Args);
         }
     }
 

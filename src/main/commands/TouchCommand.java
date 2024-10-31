@@ -1,5 +1,7 @@
 package main.commands;
 import java.io.File;
+import java.util.Arrays;
+
 import main.fileSystem.*;
 
 import main.executor.CommandExecutor;
@@ -12,8 +14,8 @@ public class TouchCommand implements Command {
         FileSystem fileSystem = FileSystem.getInstance();
         try {
             for (int i = 0; i < args.length; i++) {
-
-                executor.executeChainedCmd(args[i], args, "");
+                String[] remArgs = Arrays.copyOfRange(args, i+1, args.length);
+                executor.executeChainedCmd(args[i], remArgs, "");
 
                 // if (args[i].equalsIgnoreCase("|"))  {
                 //    PipeCommand pipeCommand = new PipeCommand();

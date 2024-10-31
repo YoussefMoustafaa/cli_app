@@ -67,8 +67,8 @@ public class CdCommand implements Command {
         }
         if (args.length > 1) {
             // cd doesn't take more than one argument
+            CommandExecutor executor = new CommandExecutor();
             for (int i = 1; i < args.length; i++) {
-                CommandExecutor executor = new CommandExecutor();
                 executor.executeChainedCmd(args[i], args, "");
             }
             return;

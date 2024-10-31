@@ -4,21 +4,12 @@ import main.executor.CommandExecutor;
 import main.parser.CommandParser;
 
 // implement | command
-public class PipeCommand implements Command {
+public class PipeCommand extends ChainedCommand {
     // touch myfile.txt | echo "Hello World" > myfile.txt | cat myfile.txt
-    private String input;
-
-    public PipeCommand() {
-        this.input = "";
-    }
-
-    public void setInput(String inputString) {
-        this.input = inputString;
-    }
-
     @Override
     public void execute(String[] args) {
 
+        CommandExecutor executor = new CommandExecutor();
         String cmd = args[0];
 
         if (cmd.equalsIgnoreCase("|") || cmd.equalsIgnoreCase(">") || cmd.equalsIgnoreCase(">>")) {
@@ -27,16 +18,13 @@ public class PipeCommand implements Command {
         }
 
         if (cmd == "cat") {
-            CatCommand catCommand = new CatCommand();
-            catCommand.execute(args);
-            catCommand.setInput(input);
+            executor.executeChainedCmd(cmd, args, this.input);
             return;
         }
 
         CommandParser parser = new CommandParser();
         parser.parse(args);
 
-        CommandExecutor executor = new CommandExecutor();
         executor.execute(parser);
 
     }

@@ -8,7 +8,10 @@ public class FileSystem {
 
     private FileSystem() {
         // Initialize current directory to the user's home directory
-        currentDirectory = new File(System.getProperty("user.home"));
+
+        // Initialize current directory to the current directory of the project
+
+        currentDirectory = new File(System.getProperty("user.dir"));
     }
 
     public static FileSystem getInstance() {

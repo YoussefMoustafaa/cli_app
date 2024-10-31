@@ -1,5 +1,7 @@
 package main.commands;
 import java.nio.file.Path;
+
+import main.executor.CommandExecutor;
 import main.fileSystem.FileSystem;
 
 public class CdCommand implements Command {
@@ -12,7 +14,7 @@ public class CdCommand implements Command {
     @Override
     public void execute(String[] args) {
         FileSystem fileSystem = FileSystem.getInstance();
-//        System.out.println("Directory Path before applying changes: " + currPath.toAbsolutePath());
+        // System.out.println("Directory Path before applying changes: " + currPath.toAbsolutePath());
         currPath = fileSystem.getCurrentDirectory().toPath();
         if (args == null || args.length == 0 || args[0].equals("~")) {
             /* Go to home directory if the given command is one of:
@@ -25,12 +27,12 @@ public class CdCommand implements Command {
             System.out.println("Current Directory Path: " + fileSystem.getCurrentDirectory());
             return;
         }
-        if (args.length > 1) {
-            // cd doesn't take more than one argument
+        // if (args.length > 1) {
+        //     // cd doesn't take more than one argument
 
-            System.out.println("cd: too many arguments");
-            return;
-        }
+        //     System.out.println("cd: too many arguments");
+        //     return;
+        // }
         if (args[0].equalsIgnoreCase("..")) {
             // go backward in path by one directory
 
@@ -62,6 +64,14 @@ public class CdCommand implements Command {
         }
         else {
             System.out.println("cd: No such directory");
+        }
+        if (args.length > 1) {
+            // cd doesn't take more than one argument
+            for (int i = 1; i < args.length; i++) {
+                CommandExecutor executor = new CommandExecutor();
+                executor.executeChainedCmd(args[i], args, "");
+            }
+            return;
         }
     }
 

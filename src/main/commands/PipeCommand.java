@@ -9,6 +9,7 @@ public class PipeCommand extends ChainedCommand {
     @Override
     public void execute(String[] args) {
 
+        CommandExecutor executor = new CommandExecutor();
         String cmd = args[0];
 
         if (cmd.equalsIgnoreCase("|") || cmd.equalsIgnoreCase(">") || cmd.equalsIgnoreCase(">>")) {
@@ -17,16 +18,13 @@ public class PipeCommand extends ChainedCommand {
         }
 
         if (cmd == "cat") {
-            CatCommand catCommand = new CatCommand();
-            catCommand.execute(args);
-            catCommand.setInput(input);
+            executor.executeChainedCmd(cmd, args, this.input);
             return;
         }
 
         CommandParser parser = new CommandParser();
         parser.parse(args);
 
-        CommandExecutor executor = new CommandExecutor();
         executor.execute(parser);
 
     }

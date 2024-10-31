@@ -1,6 +1,6 @@
 package main.commands;
 import java.io.File;
-import main.fileSystem.FileSystem;
+import main.fileSystem.*;
 
 import main.executor.CommandExecutor;
 

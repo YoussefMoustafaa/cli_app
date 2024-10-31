@@ -1,6 +1,5 @@
 package main.commands;
 import java.io.File;
-import main.fileSystem.FileSystem;
 
 import main.executor.CommandExecutor;
 
@@ -9,7 +8,6 @@ public class TouchCommand implements Command {
     @Override
     public void execute(String[] args) {
         CommandExecutor executor = new CommandExecutor();
-        FileSystem fileSystem = FileSystem.getInstance();
         try {
             for (int i = 0; i < args.length; i++) {
 
@@ -38,7 +36,7 @@ public class TouchCommand implements Command {
                 // }
 
                 // File newFile = new File(args[i]);
-                File newFile = new File(fileSystem.getCurrentDirectory(), args[i]);
+                File newFile = new File(args[i]);
                 if (newFile.createNewFile()) {
                     System.out.println("File created: " + newFile.getName());
                 } else {
@@ -50,4 +48,4 @@ public class TouchCommand implements Command {
         }
     }
     
-}
+} 

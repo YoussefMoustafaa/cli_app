@@ -3,18 +3,17 @@ package main.commands;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class WriteCommand implements Command {
+public class WriteCommand extends ChainedCommand {
 
-    private String input;
 
     public WriteCommand() {
-        input = "";
+        this.input = "";
     }
-
+    
     @Override
     public void execute(String[] args) {
         // Check if a filename and content are provided as arguments
-        if (args == null || args.length < 2) {
+        if (args == null || args.length < 1) {
             System.out.println("Error: '>' command requires a filename and text to write.");
             return;
         }
@@ -24,7 +23,7 @@ public class WriteCommand implements Command {
         StringBuilder content = new StringBuilder();
 
         // Include input if it's set
-        if (!input.isEmpty()) {
+        if (!this.input.isEmpty()) {
             content.append(input).append("\n");
         }
 
@@ -40,9 +39,5 @@ public class WriteCommand implements Command {
         } catch (IOException e) {
             System.out.println("Error: Unable to write to file - " + e.getMessage());
         }
-    }
-
-    public void setInput(String inputString) {
-        this.input = inputString;
     }
 }

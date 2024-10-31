@@ -68,14 +68,16 @@ public class CommandExecutor {
 
     }
 
-    public void executeChainedCmd(String cmd, String[] Args, String inputString) {
+    public boolean executeChainedCmd(String cmd, String[] Args, String inputString) {
         Command command = chainedCommands.get(cmd);
         if (command != null && command instanceof ChainedCommand) {
-            ChainedCommand chainedCommand = (ChainedCommand) command;
-
-            String[] remArgs = Arrays.copyOfRange(Args, 2, Args.length);
-            chainedCommand.setInput(inputString);
-            chainedCommand.execute(remArgs);
+                ChainedCommand chainedCommand = (ChainedCommand) command;
+    
+                String[] remArgs = Arrays.copyOfRange(Args, 2, Args.length);
+                chainedCommand.setInput(inputString);
+                chainedCommand.execute(remArgs);
+                return true;
         }
+        return false;
     }
 }

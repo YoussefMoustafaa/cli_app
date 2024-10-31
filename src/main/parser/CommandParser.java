@@ -15,7 +15,7 @@ public class CommandParser {
     }
 
     public void parse(String input) {
-        String[] command = input.trim().split(" ");
+        String[] command = input.trim().split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
         this.cmd = command[0].toLowerCase();
         if (command.length > 1)
             this.args = Arrays.copyOfRange(command, 1, command.length);

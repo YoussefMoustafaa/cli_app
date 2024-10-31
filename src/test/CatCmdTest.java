@@ -8,9 +8,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import main.commands.CatCommand;
+import main.fileSystem.*;
 
 public class CatCmdTest {
 
+    FileSystem fileSystem = FileSystem.getInstance();
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
 
@@ -53,14 +55,14 @@ public class CatCmdTest {
     }
 
     private void createTestFile(String fileName, String content) throws Exception {
-        File file = new File(fileName);
+        File file = new File(fileSystem.getCurrentDirectory(),fileName);
         try (PrintStream out = new PrintStream(file)) {
             out.print(content);
         }
     }
 
     private void deleteTestFile(String fileName) {
-        File file = new File(fileName);
+        File file = new File(fileSystem.getCurrentDirectory(),fileName);
         file.delete();
     }
 }

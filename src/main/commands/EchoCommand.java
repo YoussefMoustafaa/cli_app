@@ -21,7 +21,7 @@ public class EchoCommand implements Command {
                 if (executor.isChainedCmd(args[i])) {
                     String[] remArgs = Arrays.copyOfRange(args, i+1, args.length);
                     executor.executeChainedCmd(args[i], remArgs, msg);
-                    return;
+                    break;
                 }
                 msg += args[i];
             }

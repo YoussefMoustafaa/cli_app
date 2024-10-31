@@ -1,8 +1,13 @@
 package main.commands;
 
+import java.util.Arrays;
+
+import main.executor.CommandExecutor;
+
 public class HelpCommand implements Command {
     @Override
     public void execute(String[] args) {
+        CommandExecutor executor = new CommandExecutor();
         String help = "  Available commands:\n" +
                 "    1. System commands: \n" +
                 "       - pwd              : Print current directory\n" +
@@ -23,6 +28,18 @@ public class HelpCommand implements Command {
                 "\n    2. Internal commands:\n" +
                 "       - exit: Exit the CLI.\n" +
                 "       - help: Display this help message.\n";
+
+        for (int i = 0; i < args.length;) {
+            if (executor.isChainedCmd(args[i])) {
+                String[] remArgs = Arrays.copyOfRange(args, i+1, args.length);
+                executor.executeChainedCmd(args[i], remArgs, help);
+                return;
+            }
+            else {
+                System.err.println("Error: " + args[i] + " is not a command");
+                return;
+            }
+        }
         System.out.println(help);
     }
 }

@@ -6,8 +6,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import main.commands.MkdirCommand;
+import main.fileSystem.*;
 
 public class MkdirCmdTest {
+
+    FileSystem fileSystem = FileSystem.getInstance();
 
     @Before
     @After
@@ -24,7 +27,7 @@ public class MkdirCmdTest {
         
         mkdirCommand.execute(args);
         
-        assertTrue(new File("testdir1").exists());
+        assertTrue(new File(fileSystem.getCurrentDirectory() + "/testdir1").exists());
     }
 
     @Test
@@ -34,8 +37,8 @@ public class MkdirCmdTest {
         
         mkdirCommand.execute(args);
         
-        assertTrue(new File("testdir1").exists());
-        assertTrue(new File("testdir2").exists());
+        assertTrue(new File(fileSystem.getCurrentDirectory() + "/testdir1").exists());
+        assertTrue(new File(fileSystem.getCurrentDirectory() + "/testdir2").exists());
     }
 
     private void deleteTestDir(String dirName) {

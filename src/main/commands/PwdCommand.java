@@ -1,4 +1,6 @@
 package main.commands;
+import java.util.Arrays;
+
 import main.executor.CommandExecutor;
 import main.fileSystem.*;
 public class PwdCommand implements Command {
@@ -11,7 +13,8 @@ public class PwdCommand implements Command {
             System.out.println(currentDirectory);
         } else {
             if (executor.isChainedCmd(args[0])) {
-                executor.executeChainedCmd(args[0], args, currentDirectory.toString());
+                String[] remArgs = Arrays.copyOfRange(args, 1, args.length);
+                executor.executeChainedCmd(args[0], remArgs, currentDirectory.toString());
             }
             else {
                 System.out.println("Error: " + args[0] + " is not a command.");

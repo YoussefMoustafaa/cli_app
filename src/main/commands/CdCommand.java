@@ -1,5 +1,6 @@
 package main.commands;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import main.executor.CommandExecutor;
 import main.fileSystem.FileSystem;
@@ -41,6 +42,17 @@ public class CdCommand implements Command {
                 fileSystem.setCurrentDirectory(currPath.toFile());
             }
             System.out.println("Current Directory Path: " + fileSystem.getCurrentDirectory());
+            if (args.length > 1) {
+                // cd doesn't take more than one argument
+                CommandExecutor executor = new CommandExecutor();
+                for (int i = 1; i < args.length; i++) {
+                    if (executor.isChainedCmd(args[i])) {
+                        String[] remArgs = Arrays.copyOfRange(args, i+1, args.length);
+                        executor.executeChainedCmd(args[i], remArgs, "");
+                    }
+                }
+                return;
+            }
             return;
         }
 
@@ -69,7 +81,10 @@ public class CdCommand implements Command {
             // cd doesn't take more than one argument
             CommandExecutor executor = new CommandExecutor();
             for (int i = 1; i < args.length; i++) {
-                executor.executeChainedCmd(args[i], args, "");
+                if (executor.isChainedCmd(args[i])) {
+                    String[] remArgs = Arrays.copyOfRange(args, i+1, args.length);
+                    executor.executeChainedCmd(args[i], remArgs, "");
+                }
             }
             return;
         }

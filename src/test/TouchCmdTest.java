@@ -7,10 +7,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import static org.junit.Assert.*;
+import main.fileSystem.*;
 
 public class TouchCmdTest {
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private FileSystem fileSystem = FileSystem.getInstance();
     private TouchCommand touchCommand;
 
     @Before
@@ -22,7 +24,7 @@ public class TouchCmdTest {
     @Test
     public void testCreateNewFile() {
         String fileName = "testFile.txt";
-        File testFile = new File(fileName);
+        File testFile = new File(fileSystem.getCurrentDirectory(), fileName);
 
         // Ensure the file does not exist before testing
         if (testFile.exists()) {
@@ -41,7 +43,7 @@ public class TouchCmdTest {
     @Test
     public void testFileAlreadyExists() {
         String fileName = "existingFile.txt";
-        File existingFile = new File(fileName);
+        File existingFile = new File(fileSystem.getCurrentDirectory(), fileName);
 
         try {
             existingFile.createNewFile(); // Create file if it doesn't exist
@@ -64,7 +66,7 @@ public class TouchCmdTest {
         File[] files = new File[fileNames.length];
 
         for (int i = 0; i < fileNames.length; i++) {
-            files[i] = new File(fileNames[i]);
+            files[i] = new File(fileSystem.getCurrentDirectory(), fileNames[i]);
             if (files[i].exists()) {
                 files[i].delete();
             }

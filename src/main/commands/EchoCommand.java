@@ -16,7 +16,8 @@ public class EchoCommand implements Command {
         {
             for (String arg : args) 
             {
-                if (executor.executeChainedCmd(arg, args, msg)) {
+                if (executor.isChainedCmd(arg)) {
+                    executor.executeChainedCmd(arg, args, msg);
                     return;
                 }
                 msg += arg;

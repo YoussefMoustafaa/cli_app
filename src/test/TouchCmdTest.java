@@ -1,66 +1,94 @@
 package test;
 
-import static org.junit.Assert.assertTrue;
-import java.io.File;
-import main.fileSystem.FileSystem;
-
+import main.commands.TouchCommand;
 import org.junit.Before;
 import org.junit.Test;
-
-import main.commands.TouchCommand;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.PrintStream;
+import static org.junit.Assert.*;
 
 public class TouchCmdTest {
 
-    private FileSystem fileSystem;
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private TouchCommand touchCommand;
-    private String testFileName;
 
     @Before
-    public void setup() {
-        fileSystem = FileSystem.getInstance();
-        String pathString = System.getProperty("java.io.tmpdir") + "/testDir";
-        File fileDirectory = new File(pathString);
-        fileSystem.setCurrentDirectory(fileDirectory);
+    public void setUp() {
+        System.setOut(new PrintStream(outContent));
         touchCommand = new TouchCommand();
-        testFileName = "testFile.txt";
-
-        // Ensure test directory is clean
-        File testDir = new File(fileSystem.getCurrentDirectory().toString());
-        if (!testDir.exists()) {
-            testDir.mkdir();
-        } else {
-            for (File file : testDir.listFiles()) {
-                file.delete();
-            }
-        }
     }
 
     @Test
-    public void testCreateFile() {
-        File testFile = new File(testFileName);
+    public void testCreateNewFile() {
+        String fileName = "testFile.txt";
+        File testFile = new File(fileName);
 
+        // Ensure the file does not exist before testing
         if (testFile.exists()) {
             testFile.delete();
         }
 
-        touchCommand.execute(new String[]{testFileName});
-
-        assertTrue("File should have been created.", testFile.exists());
-
+        touchCommand.execute(new String[]{fileName});
+        
+        assertTrue("File should be created.", testFile.exists());
+        assertTrue(outContent.toString().contains("File created: " + fileName));
+        
+        // Clean up
         testFile.delete();
     }
 
     @Test
     public void testFileAlreadyExists() {
+        String fileName = "existingFile.txt";
+        File existingFile = new File(fileName);
 
-        String filename = "existingFile.txt";
+        try {
+            existingFile.createNewFile(); // Create file if it doesn't exist
+        } catch (Exception e) {
+            fail("Setup failed: Unable to create the test file.");
+        }
 
-        // First Creation
-        touchCommand.execute(new String[]{filename});
-        File existingFile = new File(fileSystem.getCurrentDirectory(), filename);
-        assertTrue("File should be created initially.", existingFile.exists());
+        touchCommand.execute(new String[]{fileName});
+        
+        assertTrue("File should still exist.", existingFile.exists());
+        assertTrue(outContent.toString().contains("File already exists."));
+        
+        // Clean up
+        existingFile.delete();
+    }
 
-        touchCommand.execute(new String[]{filename});
-        assertTrue("File should still exist without issues after re-running touch command.", existingFile.exists());
+    @Test
+    public void testMultipleFileCreation() {
+        String[] fileNames = {"file1.txt", "file2.txt", "file3.txt"};
+        File[] files = new File[fileNames.length];
+
+        for (int i = 0; i < fileNames.length; i++) {
+            files[i] = new File(fileNames[i]);
+            if (files[i].exists()) {
+                files[i].delete();
+            }
+        }
+
+        touchCommand.execute(fileNames);
+        
+        for (File file : files) {
+            assertTrue("Each file should be created.", file.exists());
+            file.delete(); // Clean up
+        }
+        
+        String output = outContent.toString();
+        assertTrue(output.contains("File created: file1.txt"));
+        assertTrue(output.contains("File created: file2.txt"));
+        assertTrue(output.contains("File created: file3.txt"));
+    }
+
+    @Test
+    public void testInvalidFileNameHandling() {
+        String invalidFileName = "/invalid/file/name.txt";
+        
+        touchCommand.execute(new String[]{invalidFileName});
+        
+        assertTrue("Should catch and print an error.", outContent.toString().contains("Error:"));
     }
 }

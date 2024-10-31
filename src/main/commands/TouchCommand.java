@@ -1,34 +1,39 @@
 package main.commands;
 import java.io.File;
-import java.util.Arrays;
+
+import main.executor.CommandExecutor;
 
 public class TouchCommand implements Command {
     // touch myfile.txt | echo "Hello World" > myfile.txt | cat myfile.txt
     @Override
     public void execute(String[] args) {
+        CommandExecutor executor = new CommandExecutor();
         try {
             for (int i = 0; i < args.length; i++) {
-                if (args[i].equalsIgnoreCase("|"))  {
-                   PipeCommand pipeCommand = new PipeCommand();
-                   String[] remArgs = Arrays.copyOfRange(args, i + 1, args.length);
-                   pipeCommand.setInput("");
-                   pipeCommand.execute(remArgs);
-                   return;
-                }
-                else if (args[i].equalsIgnoreCase(">")) {
-                    WriteCommand writeCommand = new WriteCommand();
-                    String[] remArgs = Arrays.copyOfRange(args, i + 1, args.length);
-                    writeCommand.setInput("");
-                    writeCommand.execute(remArgs);
-                    return;
-                }
-                else if (args[i].equalsIgnoreCase(">>")) {
-                    AppendCommand appendCommand = new AppendCommand();
-                    String[] remArgs = Arrays.copyOfRange(args, i + 1, args.length);
-                    appendCommand.setInput("");
-                    appendCommand.execute(remArgs);
-                    return;
-                }
+
+                executor.executeChainedCmd(args[i], args, "");
+
+                // if (args[i].equalsIgnoreCase("|"))  {
+                //    PipeCommand pipeCommand = new PipeCommand();
+                //    String[] remArgs = Arrays.copyOfRange(args, i + 1, args.length);
+                //    pipeCommand.setInput("");
+                //    pipeCommand.execute(remArgs);
+                //    return;
+                // }
+                // else if (args[i].equalsIgnoreCase(">")) {
+                //     WriteCommand writeCommand = new WriteCommand();
+                //     String[] remArgs = Arrays.copyOfRange(args, i + 1, args.length);
+                //     writeCommand.setInput("");
+                //     writeCommand.execute(remArgs);
+                //     return;
+                // }
+                // else if (args[i].equalsIgnoreCase(">>")) {
+                //     AppendCommand appendCommand = new AppendCommand();
+                //     String[] remArgs = Arrays.copyOfRange(args, i + 1, args.length);
+                //     appendCommand.setInput("");
+                //     appendCommand.execute(remArgs);
+                //     return;
+                // }
 
                 // File newFile = new File(args[i]);
                 File newFile = new File(args[i]);

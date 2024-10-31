@@ -4,18 +4,8 @@ import main.executor.CommandExecutor;
 import main.parser.CommandParser;
 
 // implement | command
-public class PipeCommand implements Command {
+public class PipeCommand extends ChainedCommand {
     // touch myfile.txt | echo "Hello World" > myfile.txt | cat myfile.txt
-    private String input;
-
-    public PipeCommand() {
-        this.input = "";
-    }
-
-    public void setInput(String inputString) {
-        this.input = inputString;
-    }
-
     @Override
     public void execute(String[] args) {
 

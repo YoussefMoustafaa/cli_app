@@ -1,5 +1,7 @@
 package main.commands;
 
+import java.util.Arrays;
+
 import main.executor.CommandExecutor;
 
 public class EchoCommand implements Command {
@@ -14,13 +16,14 @@ public class EchoCommand implements Command {
         }
         else 
         {
-            for (String arg : args) 
+            for (int i = 0; i < args.length; i++) 
             {
-                if (executor.isChainedCmd(arg)) {
-                    executor.executeChainedCmd(arg, args, msg);
+                if (executor.isChainedCmd(args[i])) {
+                    String[] remArgs = Arrays.copyOfRange(args, i+1, args.length);
+                    executor.executeChainedCmd(args[i], remArgs, msg);
                     return;
                 }
-                msg += arg;
+                msg += args[i];
             }
             System.out.println(msg);
         }

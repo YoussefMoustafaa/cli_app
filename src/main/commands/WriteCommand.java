@@ -2,6 +2,8 @@ package main.commands;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
+
 import main.fileSystem.*;
 
 import main.executor.CommandExecutor;
@@ -50,7 +52,8 @@ public class WriteCommand extends ChainedCommand {
                 if (!executor.isChainedCmd(args[1])) {
                     System.out.println("Error: " + args[1] + " is not a command");
                 } else {
-                    executor.executeChainedCmd(args[1], args, "");
+                    String[] remArgs = Arrays.copyOfRange(args, 2, args.length);
+                    executor.executeChainedCmd(args[1], remArgs, "");
                 }
             }
         } catch (IOException e) {

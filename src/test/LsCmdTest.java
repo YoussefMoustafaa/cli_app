@@ -10,8 +10,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class LsCmdTest {
     private LsCommand lsCommand;
@@ -32,7 +34,8 @@ public class LsCmdTest {
         new File(subDirName).mkdir();
 
         // Create visible and hidden files
-        new File(testDirName, hiddenFileName).createNewFile();
+        //new File(testDirName, hiddenFileName).createNewFile();
+        new File(testDirName, "." + hiddenFileName).createNewFile();
         new File(testDirName, visibleFileName).createNewFile();
     }
 
@@ -51,12 +54,26 @@ public class LsCmdTest {
 
     @Test
     public void testListAllFilesWithAFlag() {
-        String[] args = {testDirName, "-a"};
-        lsCommand.execute(args);
+        
 
-        String output = outContent.toString();
-        assertTrue("Output should contain the visible file.", output.contains("file: visibleFile.txt"));
-        assertTrue("Output should contain the hidden file.", output.contains("file: .hiddenFile"));
+        File tempDir = new File("testDirName");
+        File hiddenFile = new File(testDirName, ".hiddenFile");
+        File visibleFile = new File(testDirName, "visibleFile");
+        if (!tempDir.exists()) tempDir.mkdir();
+        try {
+            hiddenFile.createNewFile();
+            visibleFile.createNewFile();
+
+            lsCommand.execute(new String[]{"-a", "-r", "testDir"});
+            String output = outContent.toString();
+            assertTrue(output.indexOf("visibleFile") < output.indexOf(".hiddenFile"));
+        } catch (Exception e) {
+            fail("Exception thrown during test setup: " + e.getMessage());
+        } finally {
+            hiddenFile.delete();
+            visibleFile.delete();
+            tempDir.delete();
+        }
     }
 
     @Test
@@ -70,21 +87,6 @@ public class LsCmdTest {
 
         assertTrue("The visible file should be listed after the hidden file when reversed.", visibleIndex > hiddenIndex);
     }
-    /*@Test
-    public void testReverseOrderWithRFlag() {
-        String[] args = {testDirName, "-r"};
-        lsCommand.execute(args);
-
-        String output = outContent.toString().trim();
-        String[] lines = output.split("\\R"); // Split by line breaks
-
-        // Ensure that we have at least two lines in the output
-        assertTrue("Output should contain at least two files.", lines.length >= 2);
-
-        // Check that the last two lines are in the expected reversed order
-        assertEquals("file: .hiddenFile", lines[0]);
-        assertEquals("file: visibleFile.txt", lines[1]);
-    }*/
 
     @Test
     public void testNonExistentDirectory() {

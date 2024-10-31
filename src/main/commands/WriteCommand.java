@@ -2,6 +2,7 @@ package main.commands;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import main.fileSystem.*;
 
 import main.executor.CommandExecutor;
 
@@ -15,6 +16,7 @@ public class WriteCommand extends ChainedCommand {
     @Override
     public void execute(String[] args) {
         CommandExecutor executor = new CommandExecutor();
+        FileSystem fileSystem = FileSystem.getInstance();
         // Check if a filename and content are provided as arguments
         if (args == null || args.length == 0) {
             System.out.println("Error: '>' command requires a filename and text to write.");
@@ -25,15 +27,14 @@ public class WriteCommand extends ChainedCommand {
         String filename = args[0];
         StringBuilder content = new StringBuilder();
 
+        // echo "hello" > test.txt
+
+        if (this.input == null) {
+            this.input = "";
+        }
         // Include input if it's set
         if (!this.input.isEmpty()) {
             content.append(input).append("\n");
-        }
-        else {
-            // If no input is set, use the command line arguments as content
-            if (args.length > 1 && executor.isChainedCmd(args[1])) {
-                
-            }
         }
 
         // // Append the rest of the args as the content
@@ -42,9 +43,16 @@ public class WriteCommand extends ChainedCommand {
         // }
 
         // Write content to file in append mode
-        try (FileWriter writer = new FileWriter(filename, true)) { // `true` enables append mode
+        try (FileWriter writer = new FileWriter(fileSystem.getCurrentDirectory() + "/" + filename, true)) { // `true` enables append mode
             writer.write(content.toString().trim() + "\n");  // Trim extra space and add newline
             System.out.println("Success: Content written to " + filename);
+            if (args.length > 1) {
+                if (!executor.isChainedCmd(args[1])) {
+                    System.out.println("Error: " + args[1] + " is not a command");
+                } else {
+                    executor.executeChainedCmd(args[1], args, "");
+                }
+            }
         } catch (IOException e) {
             System.out.println("Error: Unable to write to file - " + e.getMessage());
         }

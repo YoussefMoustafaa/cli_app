@@ -2,9 +2,6 @@ package test;
 
 import static org.junit.Assert.assertTrue;
 import java.io.File;
-import java.nio.file.Paths;
-// import path
-import java.nio.file.Path;
 import main.fileSystem.FileSystem;
 
 import org.junit.Before;
@@ -22,7 +19,8 @@ public class TouchCmdTest {
     public void setup() {
         fileSystem = FileSystem.getInstance();
         String pathString = System.getProperty("java.io.tmpdir") + "/testDir";
-        Path path = Paths.get(pathString);
+        File fileDirectory = new File(pathString);
+        fileSystem.setCurrentDirectory(fileDirectory);
         touchCommand = new TouchCommand();
         testFileName = "testFile.txt";
 

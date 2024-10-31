@@ -5,15 +5,15 @@ import main.fileSystem.FileSystem;
 public class CdCommand implements Command {
     private Path currPath;
 
-    public CdCommand(){
-//        this.currPath = path;
+    public CdCommand() {
+    //    this.currPath = path;
     }
 
     @Override
     public void execute(String[] args) {
         FileSystem fileSystem = FileSystem.getInstance();
 //        System.out.println("Directory Path before applying changes: " + currPath.toAbsolutePath());
-
+        currPath = fileSystem.getCurrentDirectory().toPath();
         if (args == null || args.length == 0 || args[0].equals("~")) {
             /* Go to home directory if the given command is one of:
              1) cd
@@ -31,7 +31,7 @@ public class CdCommand implements Command {
             System.out.println("cd: too many arguments");
             return;
         }
-        if (args[0].equals("..")) {
+        if (args[0].equalsIgnoreCase("..")) {
             // go backward in path by one directory
 
             if (currPath.getParent() != null) {

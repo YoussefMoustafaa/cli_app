@@ -45,7 +45,7 @@ public class WriteCommand extends ChainedCommand {
         // }
 
         // Write content to file in append mode
-        try (FileWriter writer = new FileWriter(fileSystem.getCurrentDirectory() + "/" + filename, true)) { // `true` enables append mode
+        try (FileWriter writer = new FileWriter(fileSystem.getCurrentDirectory() + "/" + filename, false)) { // `true` enables append mode
             writer.write(content.toString().trim() + "\n");  // Trim extra space and add newline
             System.out.println("Success: Content written to " + filename);
             if (args.length > 1) {

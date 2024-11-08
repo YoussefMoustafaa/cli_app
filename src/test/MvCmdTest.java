@@ -10,11 +10,12 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import main.fileSystem.*;
 
 import static org.junit.Assert.*;
 
 public class MvCmdTest {
-
+    FileSystem fileSystem = FileSystem.getInstance();
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private MvCommand mvCommand;
 
@@ -26,8 +27,8 @@ public class MvCmdTest {
 
     @Test
     public void testMoveSingleFileToDirectory() throws IOException {
-        File sourceFile = new File("testFile.txt");
-        File targetDir = new File("targetDir");
+        File sourceFile = new File(fileSystem.getCurrentDirectory(), "testFile.txt");
+        File targetDir = new File(fileSystem.getCurrentDirectory(), "targetDir");
         
         // Setup: create source file and target directory
         sourceFile.createNewFile();
@@ -47,8 +48,8 @@ public class MvCmdTest {
 
     @Test
     public void testRenameFile() throws IOException {
-        File sourceFile = new File("testFile.txt");
-        File renamedFile = new File("renamedFile.txt");
+        File sourceFile = new File(fileSystem.getCurrentDirectory(), "testFile.txt");
+        File renamedFile = new File(fileSystem.getCurrentDirectory(), "renamedFile.txt");
         
         // Setup: create the source file
         sourceFile.createNewFile();
@@ -65,9 +66,9 @@ public class MvCmdTest {
 
     @Test
     public void testMoveMultipleFilesToDirectory() throws IOException {
-        File file1 = new File("file1.txt");
-        File file2 = new File("file2.txt");
-        File targetDir = new File("multiTargetDir");
+        File file1 = new File(fileSystem.getCurrentDirectory(), "file1.txt");
+        File file2 = new File(fileSystem.getCurrentDirectory(), "file2.txt");
+        File targetDir = new File(fileSystem.getCurrentDirectory(), "multiTargetDir");
         
         // Setup: create files and target directory
         file1.createNewFile();
@@ -93,7 +94,7 @@ public class MvCmdTest {
     @Test
     public void testSourceFileDoesNotExist() {
         String nonExistentFile = "nonExistentFile.txt";
-        File targetDir = new File("targetDir");
+        File targetDir = new File(fileSystem.getCurrentDirectory(), "targetDir");
         
         // Setup: create the target directory only
         targetDir.mkdir();
@@ -108,9 +109,9 @@ public class MvCmdTest {
 
     @Test
     public void testDestinationNotDirectoryForMultipleFiles() throws IOException {
-        File file1 = new File("file1.txt");
-        File file2 = new File("file2.txt");
-        File notADirectory = new File("notADirectory.txt");
+        File file1 = new File(fileSystem.getCurrentDirectory(),"file1.txt");
+        File file2 = new File(fileSystem.getCurrentDirectory(), "file2.txt");
+        File notADirectory = new File(fileSystem.getCurrentDirectory(), "notADirectory.txt");
 
         // Setup: create files and a non-directory file
         file1.createNewFile();

@@ -29,6 +29,10 @@ public class HelpCommand implements Command {
                 "       - exit: Exit the CLI.\n" +
                 "       - help: Display this help message.\n";
 
+        if (args == null || args.length == 0) {
+            System.out.println(help);
+            return;
+        }
         for (int i = 0; i < args.length;) {
             if (executor.isChainedCmd(args[i])) {
                 String[] remArgs = Arrays.copyOfRange(args, i+1, args.length);
@@ -40,6 +44,5 @@ public class HelpCommand implements Command {
                 return;
             }
         }
-        System.out.println(help);
     }
 }

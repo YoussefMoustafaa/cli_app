@@ -1,18 +1,56 @@
+# Java Command Line Interface (CLI)
+
+A Java-based command-line interface that implements common Unix/Linux commands. This project provides a simple and extensible CLI framework with support for basic file system operations and command chaining.
+
+## Features
+
+### System Commands
+- `pwd` - Print current working directory
+- `cd <directory>` - Change directory
+- `echo` - Print arguments
+- `ls` - List directory contents
+  - `ls -a` - List including hidden files
+  - `ls -r` - List in reverse order
+- `mkdir <dirName>` - Create new directory
+- `rmdir <dirName>` - Remove directory
+- `touch <fileName>` - Create empty file
+- `mv <src> <dest>` - Move or rename file
+- `rm <fileName>` - Remove file
+- `cat <fileName>` - Display file contents
+
+### File Operations
+- `> <fileName>` - Redirect output to file (overwrite)
+- `>> <fileName>` - Append output to file
+- `|` - Pipe command output to another command
+
+### Internal Commands
+- `exit` - Exit the CLI
+- `help` - Display help message
+
+## Project Structure
+
+- `src/` - Source code directory
+  - `main/` - Main application code
+    - `commands/` - Command implementations
+    - `fileSystem/` - File system management
+    - `executor/` - Command execution logic
+    - `parser/` - Command parsing logic
+  - `test/` - Unit tests
+- `lib/` - External dependencies
+- `bin/` - Compiled output files
+
 ## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+### Prerequisites
+- Java Development Kit (JDK) 8 or higher
+- Visual Studio Code with Java extensions
 
-## Folder Structure
+### Setup
+1. Clone the repository
+2. Open the project in Visual Studio Code
+3. Ensure Java extensions are installed
+4. Build the project using the integrated build tools
 
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+### Running the Application
+1. Navigate to the project directory
+2. Run the main class:
